@@ -1,5 +1,6 @@
 import {useRef, useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthProvider'
+import HomeFeed from './HomeFeedComponent'
 import {Link} from 'react-router-dom'
 
 import axios from '../api/axios'
@@ -33,8 +34,8 @@ const Login = () => {
                     headers: {'Content-Type': 'application/json'}
                 }
             )
-            console.log(JSON.stringify(response?.data))
-            setAuth({user, pwd})
+            console.log({user, pwd, id: response?.data.id})
+            setAuth({user, pwd, id: response?.data.id})
             setSuccess(true)
         } catch (err) {
             if(!err?.response){
@@ -53,42 +54,55 @@ const Login = () => {
     return (
         <>
             {success? (
-                <section>
-                    <h1>Você está logado!</h1>
-                    <br/>
-                    <p>
-                        <Link to="/">Voltar para a página inicial</Link>
-                    </p>
-                </section>
+                <HomeFeed/>
             ) : (
-                <section>
-                    <p ref={errRef} className={errMsg? "errmsg" :
-                    "offscreen"} aria-live="asserrtive">{errMsg}</p>
-                    <h1>Sign In</h1>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor='username'>Username:</label>
-                        <input 
-                            type="text" 
-                            id="username"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setUser(e.target.value)}
-                            value={user}
-                            required
-                        /><br></br>
-                        <label htmlFor='password'>Password:</label>
-                        <input 
-                            type="password" 
-                            id="password"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setPwd(e.target.value)}
-                            value={pwd}
-                            required
-                        />
-                        <button>Sign in</button>
-                    </form>
-                </section>
+                <>
+                    <div class="container mt-4 mb-5">
+                        <div class="justify-content-between d-flex align-items-center">
+                            <form onSubmit={handleSubmit}>
+                                <div class="form-outline">
+                                    <input                 
+                                        type="text" 
+                                        id="username"
+                                        ref={userRef}
+                                        autoComplete="off"
+                                        onChange={(e) => setUser(e.target.value)}
+                                        value={user}
+                                        required
+                                        class="form-control" />
+                                    <label class="form-label" for="username">Username</label>
+                                </div>
+
+                                <div class="form-outline">
+                                    <input 
+                                        type="password" 
+                                        id="password"
+                                        ref={userRef}
+                                        autoComplete="off"
+                                        onChange={(e) => setPwd(e.target.value)}
+                                        value={pwd}
+                                        required
+                                    class="form-control" />
+                                    <label class="form-label" for="password">Password</label>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        <div class="col">
+                                        <a href="#!">Forgot password?</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+
+                                <div class="text-center">
+                                    <p>Not a member? <a href="#!">Register</a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </>
             )}
         </>
     )

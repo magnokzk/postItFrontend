@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './HeaderComponent'
 import Footer from './FooterHeader'
-import Home from './HomeComponent'
+import HomeFeed from './HomeFeedComponent'
 import Login from './LoginComponent'
 import About from './AboutComponent'
 
