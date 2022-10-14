@@ -58,8 +58,13 @@ const Login = () => {
             ) : (
                 <>
                     <div class="container mt-4 mb-5">
-                        <div class="justify-content-between d-flex align-items-center">
-                            <form onSubmit={handleSubmit}>
+                        <div class="justify-content-center col-md-12 d-flex align-items-center">
+                            <form onSubmit={handleSubmit} class="border rounded p-5">
+                                {errMsg.length > 0? 
+                                    <div class="alert alert-danger" role="alert">
+                                        {errMsg}
+                                    </div> : ""
+                                }
                                 <div class="form-outline">
                                     <input                 
                                         type="text" 
@@ -70,7 +75,7 @@ const Login = () => {
                                         value={user}
                                         required
                                         class="form-control" />
-                                    <label class="form-label" for="username">Username</label>
+                                    <label class="form-label" for="username">Nome de usuário</label>
                                 </div>
 
                                 <div class="form-outline">
@@ -83,21 +88,21 @@ const Login = () => {
                                         value={pwd}
                                         required
                                     class="form-control" />
-                                    <label class="form-label" for="password">Password</label>
+                                    <label class="form-label" for="password">Senha</label>
                                 </div>
 
                                 <div class="row">
                                     <div class="col d-flex justify-content-center">
                                         <div class="col">
-                                        <a href="#!">Forgot password?</a>
+                                        <a href="#!">Esqueceu sua senha?</a>
                                         </div>
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                                <button type="submit" class="btn btn-primary btn-block mb-4">Entrar</button>
 
                                 <div class="text-center">
-                                    <p>Not a member? <a href="#!">Register</a></p>
+                                    <p>Não está cadastrado? <a href="#!">Registre-se</a></p>
                                 </div>
                             </form>
                         </div>
