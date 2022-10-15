@@ -60,6 +60,9 @@ const Login = () => {
                     <div class="container mt-4 mb-5">
                         <div class="justify-content-center col-md-12 d-flex align-items-center">
                             <form onSubmit={handleSubmit} class="border rounded p-5">
+                                <div class="text-center pb-3">
+                                    <h1>PostIt!</h1>
+                                </div>
                                 {errMsg.length > 0? 
                                     <div class="alert alert-danger" role="alert">
                                         {errMsg}

@@ -17,7 +17,7 @@ function PostSection({posts, changePosts}){
 
         try{
             const response = await axios.post(POST_URL,
-                JSON.stringify({creator: auth.id, description: description}),
+                JSON.stringify({user_id: auth.id, description: description}),
                 {
                     headers: {'Content-Type': 'application/json'}
                 })
