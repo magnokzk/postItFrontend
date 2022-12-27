@@ -1,7 +1,6 @@
 import {useRef, useState, useEffect, useContext} from 'react'
 import AuthContext from '../context/AuthProvider'
 import HomeFeed from './HomeFeedComponent'
-import {Link} from 'react-router-dom'
 
 import axios from '../api/axios'
 const LOGIN_URL = 'controllers/auth'
@@ -34,7 +33,7 @@ const Login = () => {
                     headers: {'Content-Type': 'application/json'}
                 }
             )
-            console.log({user, pwd, id: response?.data.id})
+            localStorage.setItem('token', response?.data.token)
             setAuth({user, pwd, id: response?.data.id})
             setSuccess(true)
         } catch (err) {

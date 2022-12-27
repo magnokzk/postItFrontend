@@ -8,6 +8,7 @@ const POST_URL = 'controllers/post'
 function PostSection({posts, changePosts}){
 
     const { auth } = useContext(AuthContext)
+    const token = localStorage.getItem('token')
 
     const [description, setDescription] = useState('')
 
@@ -17,9 +18,9 @@ function PostSection({posts, changePosts}){
 
         try{
             const response = await axios.post(POST_URL,
-                JSON.stringify({user_id: auth.id, description: description}),
+                JSON.stringify({userId: auth.id, description: description}),
                 {
-                    headers: {'Content-Type': 'application/json'}
+                    headers: {'Content-Type': 'application/json', 'Authorization': token}
                 })
             const tempPosts = [...posts]
             tempPosts.push(response?.data)

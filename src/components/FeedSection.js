@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import axios from '../api/axios'
 import AuthContext from '../context/AuthProvider'
 
@@ -9,10 +9,11 @@ const GET_POSTS_URL = 'controllers/post'
 const Feed = ({posts, changePosts}) => {
 
     const { auth } = useContext(AuthContext)
+    const token = localStorage.getItem('token') 
 
     useEffect(() => {
         if(_.isEmpty(posts)){
-            axios.get(GET_POSTS_URL)
+            axios.get(GET_POSTS_URL, {headers: {"Authorization": token}})
                 .then((res) => {
                     changePosts(_.sortBy(res.data, 'id').reverse())
                 }).catch((err) => {
@@ -31,7 +32,7 @@ const Feed = ({posts, changePosts}) => {
                                     <div class="d-flex flex-row align-items-center feed-text px-2">
                                         <img class="rounded-circle m-2" src="https://assets5.lottiefiles.com/avatars/default_user.jpg" width="45"/>
                                         <div class="d-flex flex-column flex-wrap ml-2"><span class="font-weight-bold">{post.user.username}</span></div>
-                                        {(post.user.id == auth.id)? <button type="button" class="btn btn-outline-danger m-2">Apagar</button>: ""}
+                                        {(post.user.id === auth.id)? <button type="button" class="btn btn-outline-danger m-2">Apagar</button>: ""}
                                     </div>
                                     <div class="feed-icon px-2"><i class="fa fa-ellipsis-v text-black-50"></i></div>
                                 </div>
