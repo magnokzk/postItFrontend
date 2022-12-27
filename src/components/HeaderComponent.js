@@ -1,9 +1,18 @@
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import AuthContext from '../context/AuthProvider';
 
 function Header(){
+    const {setAuth} = useContext(AuthContext)
+
+    const handleLogoutClick = () => {
+        localStorage.removeItem('token')
+        setAuth({})
+    }
+
     return(
         <Navbar bg="light" expand="lg">
             <Container className='container-fluid'>
@@ -17,7 +26,7 @@ function Header(){
                     <NavDropdown.Item href="/configurations">Configurações</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item href="/logout">
-                        <Nav.Link>Sair</Nav.Link>
+                        <Nav.Link onClick={handleLogoutClick}>Sair</Nav.Link>
                     </NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
