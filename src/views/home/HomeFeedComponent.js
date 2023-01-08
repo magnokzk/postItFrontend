@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PostSection from './PostSectionComponent'
+import PostSection from './PostSection'
 import FeedSection from './FeedSection'
 
 function HomeFeed(){

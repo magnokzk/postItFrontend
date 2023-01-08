@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
-import axios from '../api/axios'
+import axios from '../../api/axios'
 import _ from 'underscore'
-import AuthContext from '../context/AuthProvider'
+import AuthContext from '../../context/AuthProvider'
 
 const POST_URL = 'controllers/post'
 

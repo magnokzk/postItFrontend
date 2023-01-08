@@ -1,15 +1,15 @@
 import React from 'react'
 import Header from './HeaderComponent'
-import HomeFeed from './HomeFeedComponent'
-import Login from './LoginComponent'
-import About from './AboutComponent'
-import Register from './RegisterComponent'
+import HomeFeed from '../home/HomeFeedComponent'
+import Login from '../login/LoginComponent'
+import About from '../about/AboutComponent'
+import Register from '../register/RegisterComponent'
 
 import { useContext } from 'react'
 import {BrowserRouter ,Route, Routes,} from 'react-router-dom'
-import AuthContext from '../context/AuthProvider'
+import AuthContext from '../../context/AuthProvider'
 import _ from 'underscore'
-import axios from '../api/axios'
+import axios from '../../api/axios'
 
 function Main(){
     const { auth, setAuth } = useContext(AuthContext)
