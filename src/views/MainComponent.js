@@ -3,6 +3,7 @@ import Header from './HeaderComponent'
 import HomeFeed from './HomeFeedComponent'
 import Login from './LoginComponent'
 import About from './AboutComponent'
+import Register from './RegisterComponent'
 
 import { useContext } from 'react'
 import {BrowserRouter ,Route, Routes,} from 'react-router-dom'
@@ -19,6 +20,9 @@ function Main(){
             .then((res) => {
                 setAuth({...auth, id: res?.data.id})
             })
+            .catch(() => {
+                localStorage.removeItem('token')
+            })
     }
 
     return(
@@ -26,6 +30,7 @@ function Main(){
             {auth.id != null? <Header/>: <></>}
             <Routes>
                 <Route path="/" element={_.isUndefined(auth.id)? <Login/>: <HomeFeed/>}/>
+                <Route path="/register" element={<Register/>}/>
                 <Route path="/sobre" element={<About/>}/>
             </Routes>
         </BrowserRouter>
