@@ -25,6 +25,7 @@ function ProfileView(){
     const token = localStorage.getItem('token')
 
     const [posts, setPosts] = useState([])
+    const [userInfo, setUserInfo] = useState({})
 
     const urlParams = useParams()
 
@@ -34,6 +35,15 @@ function ProfileView(){
             {headers: {"Authorization": token}}
         ).then((res) => {
             setPosts(_.sortBy(res.data, 'id').reverse())
+        }).catch((err) => {
+            console.log(err)
+        })
+
+        axios.get(
+            `/controllers/user/${urlParams.userId}`,
+            {headers: {"Authorization": token}}
+        ).then((res) => {
+            setUserInfo(res.data)
         }).catch((err) => {
             console.log(err)
         })
@@ -112,7 +122,7 @@ function ProfileView(){
                                 justifyContent="center"
                                 sx={{marginTop: 4.5}}
                             >
-                                <Typography>Nome de usuário</Typography>
+                                <Typography>{userInfo.username}</Typography>
                             </Box>
                         </ProfileItem>
                     </Grid> 
