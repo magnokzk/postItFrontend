@@ -6,7 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import AuthContext from '../../context/AuthProvider';
 
 function Header(){
-    const {setAuth} = useContext(AuthContext)
+    const {auth, setAuth} = useContext(AuthContext)
 
     const handleLogoutClick = () => {
         localStorage.removeItem('token')
@@ -21,7 +21,7 @@ function Header(){
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto container-fluid">
                     <Nav.Link href="/">Página Inicial</Nav.Link>
-                    <Nav.Link href="/profile">Perfil</Nav.Link>
+                    <Nav.Link href={`/profile/${auth.id}`}>Perfil</Nav.Link>
                     <NavDropdown alignright="true" title="Opções" id="basic-nav-dropdown">
                     <NavDropdown.Item href="/configurations">Configurações</NavDropdown.Item>
                     <NavDropdown.Divider />
