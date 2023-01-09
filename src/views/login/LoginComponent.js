@@ -1,8 +1,8 @@
 import {useRef, useState, useEffect, useContext} from 'react'
-import AuthContext from '../context/AuthProvider'
-import HomeFeed from './HomeFeedComponent'
+import AuthContext from '../../context/AuthProvider'
+import HomeFeed from '../home/HomeFeedComponent'
 
-import axios from '../api/axios'
+import axios from '../../api/axios'
 const LOGIN_URL = 'controllers/auth'
 
 const Login = () => {

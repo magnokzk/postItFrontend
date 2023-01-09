@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import  { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import FormControl from '@mui/material/FormControl'
 import Input from '@mui/material/Input'
@@ -10,7 +10,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 
-import axios from '../api/axios'
+import axios from '../../api/axios'
 const REGISTER_URL = 'controllers/user/register'
 
 const Register = () => {
@@ -65,7 +65,7 @@ const Register = () => {
                     borderRadius: 2,
                     borderColor: 'grey.300'
                 }}
-                >
+            >
                 <Box
                     spacing={0}
                     display='flex'
