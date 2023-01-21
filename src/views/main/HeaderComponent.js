@@ -25,7 +25,7 @@ function Header(){
                     <NavDropdown alignright="true" title="Opções" id="basic-nav-dropdown">
                     <NavDropdown.Item href="/configurations">Configurações</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href="/logout">
+                    <NavDropdown.Item>
                         <Nav.Link onClick={handleLogoutClick}>Sair</Nav.Link>
                     </NavDropdown.Item>
                     </NavDropdown>
