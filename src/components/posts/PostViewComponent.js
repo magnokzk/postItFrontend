@@ -1,8 +1,9 @@
 import { Navigate } from 'react-router-dom'
 
 import DeleteIcon from '@mui/icons-material/Delete'
-
-import { IconButton } from '@mui/material';
+import { IconButton } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import { deepOrange } from '@mui/material/colors'
 
 import {useState} from 'react'
 
@@ -32,8 +33,8 @@ const Post = (props) => {
                 <div>
                     <div class="d-flex flex-row justify-content-between align-items-center p-2 border-bottom">
                         <div class="d-flex flex-row align-items-center feed-text px-2" style={{width: "100%"}}>
-                            <img class="rounded-circle m-2" onClick={handleRedirect} src="https://assets5.lottiefiles.com/avatars/default_user.jpg" width="45"/>
-                            <div class="d-flex flex-column flex-wrap ml-2"><span class="font-weight-bold" onClick={handleRedirect} >{props.post.user.username}</span></div>
+                            <Avatar sx={{ bgcolor: deepOrange[500]}} onClick={handleRedirect} variant="circle"/>
+                            <div class="d-flex flex-column flex-wrap ml-2" style={{marginLeft: 5}}><span class="font-weight-bold" onClick={handleRedirect} >{props.post.user.username}</span></div>
                             {props.enableDeletion? <IconButton type="button" style={{marginLeft: "auto"}} onClick={() => handleDeleteClick(props.post.id)}><DeleteIcon/></IconButton>: ""}
                         </div>
                         <div class="feed-icon px-2"><i class="fa fa-ellipsis-v text-black-50"></i></div>

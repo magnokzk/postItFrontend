@@ -110,9 +110,7 @@ function ProfileView(){
                                 alignItems="center"
                                 justifyContent="center"
                             >
-                                <Avatar sx={{ bgcolor: deepOrange[500], height: 150, width: 150}} variant="circle">
-                                    U
-                                </Avatar>
+                                <Avatar sx={{ bgcolor: deepOrange[500], height: 150, width: 150}} variant="circle"/>
                             </Box>
                             <Box
                                 spacing={0}
