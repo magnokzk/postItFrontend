@@ -7,6 +7,7 @@ import PostView from '../../components/posts/PostViewComponent'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import LoadingButton from '@mui/lab/LoadingButton'
+import CircularProgress from '@mui/material/CircularProgress';
 import ReplayIcon from '@mui/icons-material/Replay'
 
 import _ from 'underscore'
@@ -19,11 +20,15 @@ const Feed = ({posts, changePosts}) => {
     const token = localStorage.getItem('token') 
 
     const [loading, setLoading] =  useState(false)
+    const [hasFailed, setHasFailed] = useState(false)
 
     useEffect(() => {
         axios.get(GET_POSTS_URL, {headers: {"Authorization": token}})
             .then((res) => {
+                setHasFailed(false)
                 changePosts(_.sortBy(res.data, 'id').reverse())
+            }).catch(() => {
+                setHasFailed(true)
             })
     }, [])
 
@@ -32,7 +37,11 @@ const Feed = ({posts, changePosts}) => {
             setLoading(true)
             await axios.get(GET_POSTS_URL, {headers: {"Authorization": token}})
                 .then((res) => {
+                    setHasFailed(false)
                     changePosts(_.sortBy(res.data, 'id').reverse())
+                })
+                .catch(() => {
+                    setHasFailed(true)
                 })
         } catch (err) {
             console.log(err)
@@ -92,16 +101,21 @@ const Feed = ({posts, changePosts}) => {
                         alignItems="center"
                         justifyContent="center"
                     >
-                         <LoadingButton
-                            color="primary"
-                            onClick={handleReloadPosts}
-                            loading={loading}
-                            loadingPosition="start"
-                            startIcon={<ReplayIcon />}
-                            variant="filled"
-                        >
-                            Recarregar
-                        </LoadingButton>
+                         {
+                            hasFailed?
+                                <LoadingButton
+                                    color="primary"
+                                    onClick={handleReloadPosts}
+                                    loading={loading}
+                                    loadingPosition="start"
+                                    startIcon={<ReplayIcon />}
+                                    variant="filled"
+                                >
+                                    Recarregar
+                                </LoadingButton>
+                            :
+                                <CircularProgress/>
+                        }
                     </Box>
                 </Container>
             }
