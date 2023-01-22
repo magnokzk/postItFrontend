@@ -22,7 +22,10 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import SearchIcon from '@mui/icons-material/Search'
 import AdbIcon from '@mui/icons-material/Adb'
+import Popover from '@mui/material/Popover'
 import { deepOrange } from '@mui/material/colors'
+
+import UserList from '../../components/users/UserListComponent'
 
 const pages = [
     {
@@ -78,28 +81,40 @@ function Header(){
     const [searchResults, setSearchResults] = React.useState([])
     const [anchorElNav, setAnchorElNav] = React.useState(null)
     const [anchorElUser, setAnchorElUser] = React.useState(null)
+    const [anchorElUserList, setAnchorElUserList] = React.useState(null)
 
     React.useEffect(() => {
-      const ourRequest = Axios.CancelToken.source() // <-- 1st step
-      
+      if(!(search?.target?.value)) {
+        setSearchResults([])
+        setAnchorElUserList(null)
+        return
+      }
+
+      const ourRequest = Axios.CancelToken.source()
       api.post(`controllers/user/findByName`, 
         {
-          username: search
+          username: search?.target?.value
         },
         {
           cancelToken: ourRequest.token,
-          headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')} // <-- 2nd step
+          headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')}
         }
       ).then((res) => {
+        console.log(res.data)
+        setAnchorElUserList(search.target)
         setSearchResults(res?.data)
       }).catch((err) => {
         console.log(err)
       })
       
       return () => {
-        ourRequest.cancel() // <-- 3rd step
+        ourRequest.cancel()
       }
     }, [search])
+
+    const handleUserListClose = () => {
+      setAnchorElUserList(null)
+    }
 
     const handleLogoutClick = () => {
         handleCloseUserMenu()
@@ -225,8 +240,21 @@ function Header(){
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
-                onChange={(e) => {setSearch(e.target.value)}}
+                onChange={setSearch}
               />
+              <Popover
+                open={Boolean(anchorElUserList)}
+                anchorEl={anchorElUserList}
+                onClose={handleUserListClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                disableAutoFocus={true}
+                disableEnforceFocus={true}
+              >
+                <UserList items={searchResults} callback={handleUserListClose}/>
+              </Popover>
             </Search>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">

@@ -5,8 +5,6 @@ import { IconButton, Typography } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import { deepOrange } from '@mui/material/colors'
 
-import {useState} from 'react'
-
 /**
  * Mounts a component react for the given post information
  * @param {object} post Object that contains post information
@@ -16,14 +14,8 @@ import {useState} from 'react'
  */
 const Post = (props) => {
 
-    const [redirect, setRedirect] = useState(false)
-
     const handleDeleteClick = (postId) => {
         props.onDeleteCallback(postId)
-    }
-
-    const handleRedirect = () => {
-        setRedirect(!redirect)
     }
 
     return(
