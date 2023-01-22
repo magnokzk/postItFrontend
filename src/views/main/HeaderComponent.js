@@ -1,21 +1,27 @@
-import { useContext } from 'react';
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import AuthContext from '../../context/AuthProvider';
+import AuthContext from '../../context/AuthProvider'
 
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import * as React from 'react'
+import Axios from 'axios'
+import api from '../../api/axios'
+import Divider from '@mui/material/Divider'
+import { styled, alpha } from '@mui/material/styles'
+import InputBase from '@mui/material/InputBase'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import Menu from '@mui/material/Menu'
+import MenuIcon from '@mui/icons-material/Menu'
+import Container from '@mui/material/Container'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
+import MenuItem from '@mui/material/MenuItem'
+import SearchIcon from '@mui/icons-material/Search'
+import AdbIcon from '@mui/icons-material/Adb'
 import { deepOrange } from '@mui/material/colors'
 
 const pages = [
@@ -23,10 +29,77 @@ const pages = [
         value: "Página Inicial",
         route: "/"
     }
-];
+]
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('md')]: {
+    marginLeft: theme.spacing(2),
+    width: 'auto',
+  },
+}))
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}))
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}))
 
 function Header(){
+  
     const {auth, setAuth} = useContext(AuthContext)
+    const [search, setSearch] = React.useState('')
+    const [searchResults, setSearchResults] = React.useState([])
+    const [anchorElNav, setAnchorElNav] = React.useState(null)
+    const [anchorElUser, setAnchorElUser] = React.useState(null)
+
+    React.useEffect(() => {
+      const ourRequest = Axios.CancelToken.source() // <-- 1st step
+      
+      api.post(`controllers/user/findByName`, 
+        {
+          username: search
+        },
+        {
+          cancelToken: ourRequest.token,
+          headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')} // <-- 2nd step
+        }
+      ).then((res) => {
+        setSearchResults(res?.data)
+      }).catch((err) => {
+        console.log(err)
+      })
+      
+      return () => {
+        ourRequest.cancel() // <-- 3rd step
+      }
+    }, [search])
 
     const handleLogoutClick = () => {
         handleCloseUserMenu()
@@ -37,23 +110,21 @@ function Header(){
     const handleProfileClick = () => {
         handleCloseUserMenu()
     }
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
   
     const handleOpenNavMenu = (event) => {
-      setAnchorElNav(event.currentTarget);
-    };
+      setAnchorElNav(event.currentTarget)
+    }
     const handleOpenUserMenu = (event) => {
-      setAnchorElUser(event.currentTarget);
-    };
+      setAnchorElUser(event.currentTarget)
+    }
   
     const handleCloseNavMenu = () => {
-      setAnchorElNav(null);
-    };
+      setAnchorElNav(null)
+    }
   
     const handleCloseUserMenu = () => {
-      setAnchorElUser(null);
-    };
+      setAnchorElUser(null)
+    }
   
     return (
       <AppBar position="static">
@@ -122,11 +193,12 @@ function Header(){
               href=""
               sx={{
                 mr: 2,
-                display: { xs: 'flex', md: 'none' },
+                pr: 2,
+                display: { xs: 'none', md: 'none' },
                 flexGrow: 1,
                 fontFamily: 'monospace',
                 fontWeight: 700,
-                letterSpacing: '.3rem',
+                letterSpacing: '.01rem',
                 color: 'inherit',
                 textDecoration: 'none',
               }}
@@ -146,7 +218,16 @@ function Header(){
                 </Button>
               ))}
             </Box>
-  
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(e) => {setSearch(e.target.value)}}
+              />
+            </Search>
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -172,6 +253,7 @@ function Header(){
                 <MenuItem key={"Perfil"} onClick={handleProfileClick} component={Link} to={`/profile/${auth.id}`}>
                     <Typography textAlign="center">Perfil</Typography>
                 </MenuItem>
+                <Divider/>
                 <MenuItem key={"Sair"} onClick={handleLogoutClick}>
                     <Typography textAlign="center">Sair</Typography>
                 </MenuItem>
