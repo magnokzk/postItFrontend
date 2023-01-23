@@ -7,10 +7,39 @@ import Register from '../register/RegisterComponent'
 import ProfileView from '../profile/ProfileView'
 
 import { useContext } from 'react'
-import {BrowserRouter ,Route, Routes,} from 'react-router-dom'
+import {BrowserRouter, Route, Routes, Navigate} from 'react-router-dom'
 import AuthContext from '../../context/AuthProvider'
 import _ from 'underscore'
 import axios from '../../api/axios'
+
+const routes = [
+    {
+        path: '/',
+        component: <HomeFeed/>,
+        secondComponent: <Login/>,
+        requireAuth: true
+    },
+    {
+        path: '/login',
+        component: <Login/>,
+        requireAuth: false
+    },
+    {
+        path: '/profile/:userId',
+        component: <ProfileView/>,
+        requireAuth: true,
+    },
+    {
+        path: '/register',
+        component: <Register/>,
+        requireAuth: false
+    },
+    {
+        path: '/sobre',
+        component: <About/>,
+        requireAuth: false
+    }
+]
 
 function Main(){
     const { auth, setAuth } = useContext(AuthContext)
@@ -30,10 +59,23 @@ function Main(){
         <BrowserRouter>
             {auth.id != null? <Header/>: <></>}
             <Routes>
-                <Route path="/" element={_.isUndefined(auth.id)? <Login/>: <HomeFeed/>}/>
-                <Route path="/profile/:userId" element={<ProfileView/>}/>
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/sobre" element={<About/>}/>
+                {
+                    _.map(routes, (route) => {
+                        if(route.requireAuth && auth.id == null){
+                            return (<Route
+                                path={route.path}
+                                element={<Navigate to='/login' replace/>}
+                            />)
+                        }
+
+                        return (
+                            <Route 
+                                path={route.path} 
+                                element={route.component}
+                            />
+                        )
+                    })
+                }
             </Routes>
         </BrowserRouter>
     )

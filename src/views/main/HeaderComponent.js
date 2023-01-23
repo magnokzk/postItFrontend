@@ -238,7 +238,7 @@ function Header(){
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Search…"
+                placeholder="Buscar usuário..."
                 inputProps={{ 'aria-label': 'search' }}
                 onChange={setSearch}
               />
@@ -253,7 +253,10 @@ function Header(){
                 disableAutoFocus={true}
                 disableEnforceFocus={true}
               >
-                <UserList items={searchResults} callback={handleUserListClose}/>
+                <UserList 
+                  items={searchResults} 
+                  callback={handleUserListClose}
+                />
               </Popover>
             </Search>
             <Box sx={{ flexGrow: 0 }}>

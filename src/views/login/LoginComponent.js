@@ -1,6 +1,6 @@
 import {useRef, useState, useEffect, useContext} from 'react'
+import { Navigate } from 'react-router-dom'
 import AuthContext from '../../context/AuthProvider'
-import HomeFeed from '../home/HomeFeedComponent'
 
 import axios from '../../api/axios'
 const LOGIN_URL = 'controllers/auth'
@@ -53,7 +53,7 @@ const Login = () => {
     return (
         <>
             {success? (
-                <HomeFeed/>
+                <Navigate to="/" replace/>
             ) : (
                 <>
                     <div class="container mt-4 mb-5">
