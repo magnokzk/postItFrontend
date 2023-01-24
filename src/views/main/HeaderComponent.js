@@ -26,6 +26,7 @@ import Popover from '@mui/material/Popover'
 import { deepOrange } from '@mui/material/colors'
 
 import UserList from '../../components/users/UserListComponent'
+import FriendRequestsVisualization from '../../components/users/molecules/FriendRequestsVisualization'
 
 const pages = [
     {
@@ -100,7 +101,6 @@ function Header(){
           headers: {'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')}
         }
       ).then((res) => {
-        console.log(res.data)
         setAnchorElUserList(search.target)
         setSearchResults(res?.data)
       }).catch((err) => {
@@ -233,6 +233,7 @@ function Header(){
                 </Button>
               ))}
             </Box>
+            <FriendRequestsVisualization/>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
