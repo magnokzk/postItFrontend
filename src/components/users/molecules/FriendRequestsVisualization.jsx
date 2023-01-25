@@ -17,6 +17,7 @@ import axios from '../../../api/axios'
 
 const GET_REQUESTS_URL = 'controllers/user/friendRequests'
 const DELETE_REQUEST_URL = 'controllers/user/friendRequests/delete'
+const ACCEPT_REQUEST_URL = 'controllers/user/friendRequests/accept'
 
 
 const Post = (props) => {
@@ -50,6 +51,18 @@ const Post = (props) => {
                     "Authorization": token
                 },
                 data: request
+            }
+        ).then(() => {
+            fetchFriendRequests()
+        }).catch(console.log)
+    }
+
+    const handleRequestAccepted = (request) => {
+        axios.post(
+            ACCEPT_REQUEST_URL,
+            request,
+            {
+                headers: {'Content-Type': 'application/json', 'Authorization': token}
             }
         ).then(() => {
             fetchFriendRequests()
@@ -94,7 +107,7 @@ const Post = (props) => {
                                 <ListItem 
                                     secondaryAction={
                                         <>
-                                            <IconButton edge="end" aria-label="comments" onClick={() => {console.log(request, 'aceitar')}}>
+                                            <IconButton edge="end" aria-label="comments" onClick={() => {handleRequestAccepted(request)}}>
                                                 <DoneIcon/>
                                             </IconButton>
                                             <IconButton edge="end" aria-label="comments" onClick={() => {handleRequestRefused(request)}}>

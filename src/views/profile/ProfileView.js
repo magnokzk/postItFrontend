@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 import { useContext, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import AuthContext from '../../context/AuthProvider'
@@ -10,15 +9,20 @@ import axios from '../../api/axios'
 
 import { styled } from '@mui/material/styles'
 import { deepOrange } from '@mui/material/colors'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid'
-import Container from '@mui/material/Container'
-import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
+import { 
+    IconButton, 
+    Avatar, 
+    Container, 
+    Grid, 
+    Paper, 
+    Box, 
+    Typography
+} from '@mui/material'
 
 const GET_POSTS_URL = 'controllers/post'
+const SEND_FRIEND_REQUEST = 'controllers/user/addFriend'
 
 function ProfileView(){
     const { auth } = useContext(AuthContext)
@@ -26,20 +30,13 @@ function ProfileView(){
 
     const [posts, setPosts] = useState([])
     const [userInfo, setUserInfo] = useState({})
+    const [friendList, setFriendList] = useState([])
+    const [userAddable, setUserAddable] = useState(false)
 
     const urlParams = useParams()
 
-    useEffect(() => {
-        axios.get(
-            `/controllers/post/${urlParams.userId}`, 
-            {headers: {"Authorization": token}}
-        ).then((res) => {
-            setPosts(_.sortBy(res.data, 'id').reverse())
-        }).catch((err) => {
-            console.log(err)
-        })
-
-        axios.get(
+    const fetchUserInfo = async () => {
+        await axios.get(
             `/controllers/user/${urlParams.userId}`,
             {headers: {"Authorization": token}}
         ).then((res) => {
@@ -47,7 +44,76 @@ function ProfileView(){
         }).catch((err) => {
             console.log(err)
         })
-    }, [])
+    }
+
+    const fetchFriendList = async () => {
+        await axios.get(
+            `/controllers/user/${urlParams.userId}/friendList`,
+            {headers: {"Authorization": token}}
+        ).then((res) => {
+            console.log('friendList: ', res.data)
+            setFriendList(res.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    const fetchPosts = async () => {
+        await axios.get(
+            `/controllers/post/${urlParams.userId}`, 
+            {headers: {"Authorization": token}}
+        ).then((res) => {
+            setPosts(_.sortBy(res.data, 'id').reverse())
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    const isUserAddable = async () => {
+        if(urlParams.userId == auth.id) {
+            setUserAddable(false)
+            return
+        }
+
+        if(_.contains(_.pluck(friendList, 'friendId'), auth.id)) {
+            setUserAddable(false)
+            return
+        }
+
+        await axios.get(
+            `/controllers/user/${urlParams.userId}/hasFriendRequest/${auth.id}`, 
+            {headers: {"Authorization": token}}
+        ).then((res) => {
+            setUserAddable(!res.data)
+        }).catch(console.log)
+    }
+
+    const handleAddFriend = () => {
+        console.log('add: ', {
+            toUserId: parseInt(urlParams.userId),
+            fromUserId: auth.id
+        })
+        axios.post(
+            SEND_FRIEND_REQUEST,
+            {
+                toUserId: parseInt(urlParams.userId),
+                fromUserId: auth.id
+            },
+            {headers: {"Authorization": token}}
+        ).then(() => {
+            setUserAddable(false)
+        }).catch(console.log)
+    }
+
+    useEffect(() => {
+        fetchUserInfo()
+        fetchPosts()
+        fetchFriendList()
+    }, [urlParams])
+
+    useEffect(() => {
+        isUserAddable()
+    }, [friendList])
 
     async function handlePostDelete (id) {
         await axios.delete(GET_POSTS_URL, {
@@ -118,10 +184,25 @@ function ProfileView(){
                                 direction="column"
                                 alignItems="center"
                                 justifyContent="center"
-                                sx={{marginTop: 4.5}}
+                                sx={{marginTop: 2}}
                             >
                                 <Typography>{userInfo.username}</Typography>
                             </Box>
+                            {
+                                userAddable
+                                    &&
+                                <Box
+                                    spacing={0}
+                                    display='flex'
+                                    direction="column"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <IconButton onClick={handleAddFriend}>
+                                        <PersonAddIcon/>
+                                    </IconButton>
+                                </Box>
+                            }
                         </ProfileItem>
                     </Grid> 
                     <Grid item xs={12} sm={12} md={9} lg={9}>
@@ -134,7 +215,7 @@ function ProfileView(){
                                             enableDeletion={auth.id === post.user.id}
                                             onDeleteCallback={handlePostDelete}
                                         />
-                                        )
+                                    )
                                 })
                             : <></>}
                         </PostsItem>
