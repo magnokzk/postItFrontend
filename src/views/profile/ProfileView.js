@@ -19,8 +19,7 @@ import {
     Grid, 
     Paper, 
     Box, 
-    Typography,
-    Divider
+    Typography
 } from '@mui/material'
 
 const GET_POSTS_URL = 'controllers/post'
@@ -53,7 +52,6 @@ function ProfileView(){
             `/controllers/user/${urlParams.userId}/friendList`,
             {headers: {"Authorization": token}}
         ).then((res) => {
-            console.log('friendList: ', res.data)
             setFriendList(res.data)
         }).catch((err) => {
             console.log(err)

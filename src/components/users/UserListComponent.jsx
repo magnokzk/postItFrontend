@@ -23,7 +23,7 @@ const Post = (props) => {
     return(
         <>
             {users && 
-            <List dense sx={{ width: '100%', minWidth: 300, minHeight: 60, bgcolor: 'background.paper' }}>
+            <List dense sx={{ width: '100%', minWidth: 300, minHeight: 60, maxHeight: 400, bgcolor: 'background.paper' }}>
                     {users.map((user) => {
                         return (
                             <ListItem disablePadding>
