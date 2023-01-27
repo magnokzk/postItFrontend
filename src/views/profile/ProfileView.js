@@ -4,6 +4,7 @@ import { useContext, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import AuthContext from '../../context/AuthProvider'
 import PostView from '../../components/posts/PostViewComponent'
+import FriendListPreview from '../../components/users/molecules/friendList/FriendListPreview'
 import _ from 'underscore'
 import axios from '../../api/axios'
 
@@ -18,7 +19,8 @@ import {
     Grid, 
     Paper, 
     Box, 
-    Typography
+    Typography,
+    Divider
 } from '@mui/material'
 
 const GET_POSTS_URL = 'controllers/post'
@@ -140,6 +142,15 @@ function ProfileView(){
         color: theme.palette.text.secondary,
         height: 250
       }))
+    const FriendListItem = styled(Paper)(({ theme }) => ({
+        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(1),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        height: 'auto'
+      }))
     const PostsItem = styled(Paper)(({ theme }) => ({
         backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
         ...theme.typography.body2,
@@ -204,6 +215,11 @@ function ProfileView(){
                                 </Box>
                             }
                         </ProfileItem>
+                        <FriendListItem>
+                            <FriendListPreview
+                                friendList={friendList}
+                            />
+                        </FriendListItem>
                     </Grid> 
                     <Grid item xs={12} sm={12} md={9} lg={9}>
                         <PostsItem>

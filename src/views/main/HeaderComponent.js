@@ -26,7 +26,7 @@ import Popover from '@mui/material/Popover'
 import { deepOrange } from '@mui/material/colors'
 
 import UserList from '../../components/users/UserListComponent'
-import FriendRequestsVisualization from '../../components/users/molecules/FriendRequestsVisualization'
+import FriendRequestsVisualization from '../../components/users/molecules/friendRequests/FriendRequestsVisualization'
 
 const pages = [
     {

@@ -13,7 +13,7 @@ import _ from 'underscore'
 
 import { useState, useEffect } from 'react'
 
-import axios from '../../../api/axios'
+import axios from '../../../../api/axios'
 
 const GET_REQUESTS_URL = 'controllers/user/friendRequests'
 const DELETE_REQUEST_URL = 'controllers/user/friendRequests/delete'
