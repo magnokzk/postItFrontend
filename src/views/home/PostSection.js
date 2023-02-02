@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react'
 import axios from '../../api/axios'
-import _ from 'underscore'
 import AuthContext from '../../context/AuthProvider'
 
 const POST_URL = 'controllers/post'
 
-function PostSection({posts, changePosts}){
+function PostSection({updatePosts, setUpdatePosts}){
 
     const { auth } = useContext(AuthContext)
     const token = localStorage.getItem('token')
@@ -13,19 +12,15 @@ function PostSection({posts, changePosts}){
     const [description, setDescription] = useState('')
 
     const handleSubmit = async (e) => {
-        
         e.preventDefault()
-
         try{
-            const response = await axios.post(POST_URL,
+            await axios.post(POST_URL,
                 JSON.stringify({userId: auth.id, description: description}),
                 {
                     headers: {'Content-Type': 'application/json', 'Authorization': token}
                 })
-            const tempPosts = [...posts]
-            tempPosts.push(response?.data)
-            changePosts(_.sortBy(tempPosts, 'id').reverse())
             setDescription('')
+            setUpdatePosts(!updatePosts)
         } catch(err) {
             console.log(err.response?.status)
         }

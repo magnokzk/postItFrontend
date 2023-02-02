@@ -4,11 +4,7 @@ import PostSection from './PostSection'
 import FeedSection from './FeedSection'
 
 function HomeFeed(){
-    const [posts, setPosts] = React.useState([])
-
-    const changePosts = (newPosts) => {
-        setPosts(newPosts)
-    }
+    const [updatePosts, setUpdatePosts] = React.useState(true)
 
     return(
         <>
@@ -16,8 +12,8 @@ function HomeFeed(){
                 <div class="d-flex justify-content-center row">
                     <div class="col-md-8">
                         <div class="feed p-2">
-                            <PostSection posts={posts} changePosts={changePosts}/>
-                            <FeedSection posts={posts} changePosts={changePosts}/>
+                            <PostSection updatePosts={updatePosts} setUpdatePosts={setUpdatePosts}/>
+                            <FeedSection updatePosts={updatePosts} setUpdatePosts={setUpdatePosts}/>
                         </div>
                     </div>
                 </div>

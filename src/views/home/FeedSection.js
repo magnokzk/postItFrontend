@@ -19,41 +19,48 @@ import GroupsIcon from '@mui/icons-material/Groups'
 import _ from 'underscore'
 
 const GET_POSTS_URL = 'controllers/post'
+const GET_FRIENDS_POSTS_URL = 'controllers/post/friendsPosts'
 
-const Feed = ({posts, changePosts}) => {
+const Feed = ({updatePosts, setUpdatePosts}) => {
 
     const { auth } = useContext(AuthContext)
-    const token = localStorage.getItem('token') 
+    const token = localStorage.getItem('token')
 
     const [loading, setLoading] =  useState(false)
+    const [posts, setPosts] = useState([])
+    const [friendsPosts, setFriendsPosts] = useState([])
     const [hasFailed, setHasFailed] = useState(false)
     const [value, setValue] = useState("1")
 
     useEffect(() => {
-        axios.get(GET_POSTS_URL, {headers: {"Authorization": token}})
-            .then((res) => {
-                setHasFailed(false)
-                changePosts(_.sortBy(res.data, 'id').reverse())
-            }).catch(() => {
-                setHasFailed(true)
-            })
-    }, [])
+        if(updatePosts) {
+            handleReloadPosts()
+        }
+    }, [updatePosts])
 
-    async function handleReloadPosts () {
+    const handleReloadPosts = async () => {
         try{
             setLoading(true)
             await axios.get(GET_POSTS_URL, {headers: {"Authorization": token}})
                 .then((res) => {
                     setHasFailed(false)
-                    changePosts(_.sortBy(res.data, 'id').reverse())
+                    setPosts(_.sortBy(res.data, 'id').reverse())
                 })
                 .catch(() => {
+                    setHasFailed(true)
+                })
+            await axios.get(GET_FRIENDS_POSTS_URL, {headers: {"Authorization": token}})
+                .then((res) => {
+                    setHasFailed(false)
+                    setFriendsPosts(_.sortBy(res.data, 'id').reverse())
+                }).catch(() => {
                     setHasFailed(true)
                 })
         } catch (err) {
             console.log(err)
         } finally {
             setLoading(false)
+            setUpdatePosts(false)
         }
     }
 
@@ -66,15 +73,13 @@ const Feed = ({posts, changePosts}) => {
                     id: id
                 }
             }).then(() => {
-                changePosts(_.filter(posts, (post) => {
-                    if(post.id !== id){
-                        return post
-                    }
-                }))
-            }).catch(err => console.log(err))
+                handleReloadPosts()
+            })
+            .catch(err => console.log(err))
     }
 
     const handleValueChange = (event, newValue) => {
+        setUpdatePosts(true)
         setValue(newValue)
     }
 
@@ -141,20 +146,56 @@ const Feed = ({posts, changePosts}) => {
                     }
                 </TabPanel>
                 <TabPanel sx={{margin: 0, padding: 0}} value="2">
-                    {
-                        hasFailed?
-                        <LoadingButton
-                            color="primary"
-                            onClick={handleReloadPosts}
-                            loading={loading}
-                            loadingPosition="start"
-                            startIcon={<ReplayIcon />}
-                            variant="filled"
-                        >
-                            Recarregar
-                        </LoadingButton>
-                        :
-                        <CircularProgress/>
+                {
+                        friendsPosts.length > 0?
+                                friendsPosts.map((post) => {
+                                    return (
+                                            <PostView 
+                                                post={post}
+                                                onDeleteCallback={handlePostDelete}
+                                                enableDeletion={post.user.id === auth.id}
+                                            />
+                                        )
+                                    }):
+                                    <Container
+                                        spacing={0}
+                                        direction="column"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        fixed
+                                        sx={{
+                                            paddingTop: 2,
+                                            paddingBottom: 2,
+                                            marginTop: 5,
+                                            border: 1.5,
+                                            borderRadius: 2,
+                                            borderColor: 'grey.300'
+                                        }}
+                                    >
+                                        <Box
+                                            spacing={0}
+                                            display='flex'
+                                            direction="column"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                        >
+                                            {
+                                                hasFailed?
+                                                    <LoadingButton
+                                                        color="primary"
+                                                        onClick={handleReloadPosts}
+                                                        loading={loading}
+                                                        loadingPosition="start"
+                                                        startIcon={<ReplayIcon />}
+                                                        variant="filled"
+                                                    >
+                                                        Recarregar
+                                                    </LoadingButton>
+                                                :
+                                                    <CircularProgress/>
+                                            }
+                                        </Box>
+                                    </Container>
                     }
                 </TabPanel>
             </TabContext>
