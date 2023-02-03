@@ -94,7 +94,7 @@ function Header(){
       const ourRequest = Axios.CancelToken.source()
       api.post(`controllers/user/findByName`, 
         {
-          username: search?.target?.value
+          userName: search?.target?.value
         },
         {
           cancelToken: ourRequest.token,

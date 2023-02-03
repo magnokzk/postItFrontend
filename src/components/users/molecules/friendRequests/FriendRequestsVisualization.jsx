@@ -103,7 +103,7 @@ const FriendRequestsVisualization = (props) => {
                 }}
             >
                 {friendRequests.length > 0?
-                <List sx={{ width: '300px'}}>
+                <List sx={{ width: 'auto'}}>
                 {
                     _.map(friendRequests, (request) => {
                         return (
@@ -123,8 +123,9 @@ const FriendRequestsVisualization = (props) => {
                                     <Avatar/>
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary={request.fromUserInfo.username}
-                                    secondary={request.fromUserInfo.email}
+                                    primary={`${request.fromUserInfo.name} ${request.fromUserInfo.surname}`}
+                                    secondary={request.fromUserInfo.userName}
+                                    sx={{paddingRight: 5}}
                                 />
                             </ListItem>
                         )

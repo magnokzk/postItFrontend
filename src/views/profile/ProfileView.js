@@ -195,7 +195,17 @@ function ProfileView(){
                                 justifyContent="center"
                                 sx={{marginTop: 2}}
                             >
-                                <Typography>{userInfo.username}</Typography>
+                                <Typography sx={{color: 'black'}}>{`${userInfo.name} ${userInfo.surname}`}</Typography>
+                            </Box>
+                            <Box
+                                spacing={0}
+                                display='flex'
+                                direction="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                sx={{marginTop: -1}}
+                            >
+                                <Typography>{userInfo.userName}</Typography>
                             </Box>
                             {
                                 userAddable

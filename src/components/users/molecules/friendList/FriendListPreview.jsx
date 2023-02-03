@@ -71,7 +71,16 @@ const FriendListPreview = (props) => {
                                     alignItems="center"
                                     justifyContent="center"
                                 >
-                                    <Typography>{friend.friendInfo.username}</Typography>
+                                    <Typography sx={{color: 'black'}}>{friend.friendInfo.name}</Typography>
+                                </Box>
+                                <Box
+                                    spacing={0}
+                                    display='flex'
+                                    direction="column"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <Typography variant='caption'>{friend.friendInfo.userName}</Typography>
                                 </Box>
                             </FriendPaper>
                         </Grid>

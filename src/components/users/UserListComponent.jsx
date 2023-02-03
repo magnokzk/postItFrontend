@@ -34,8 +34,8 @@ const UserListComponent = (props) => {
                                             <Avatar/>
                                         </ListItemAvatar>
                                         <ListItemText
-                                            primary={user.username}
-                                            secondary={user.email}
+                                            primary={`${user.name} ${user.surname}`}
+                                            secondary={user.userName}
                                         />
                                     </ListItemButton>
                                 </ListItem>

@@ -25,7 +25,22 @@ const Post = (props) => {
                     <div class="d-flex flex-row justify-content-between align-items-center p-2 border-bottom">
                         <div class="d-flex flex-row align-items-center feed-text px-2" style={{width: "100%"}}>
                             <Avatar sx={{ bgcolor: deepOrange[500]}} component={Link} to={`/profile/${props.post.user.id}`} variant="circle"/>
-                            <div class="d-flex flex-column flex-wrap ml-2" style={{marginLeft: 5}}><Typography style={{ textDecoration: 'none', color: "black" }} component={Link} to={`/profile/${props.post.user.id}`}>{props.post.user.username}</Typography></div>
+                            <div class="d-flex flex-column flex-wrap ml-2" style={{marginLeft: 10}}>
+                                <Typography 
+                                    style={{ textDecoration: 'none', color: "black"}} 
+                                    component={Link} 
+                                    to={`/profile/${props.post.user.id}`}
+                                >
+                                    {`${props.post.user.name} ${props.post.user.surname}`}
+                                </Typography>
+                                <Typography 
+                                    style={{ textDecoration: 'none', color: "grey", marginTop: -5}} 
+                                    component={Link} 
+                                    to={`/profile/${props.post.user.id}`}
+                                >
+                                    {props.post.user.userName}
+                                </Typography>
+                                </div>
                             {props.enableDeletion? <IconButton type="button" style={{marginLeft: "auto"}} onClick={() => handleDeleteClick(props.post.id)}><DeleteIcon/></IconButton>: ""}
                         </div>
                         <div class="feed-icon px-2"><i class="fa fa-ellipsis-v text-black-50"></i></div>
