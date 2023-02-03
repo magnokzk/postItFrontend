@@ -6,6 +6,8 @@ import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 /**
  * 
@@ -13,7 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
  * @param {Function} callback Callback for when some item is clicked
  * @returns callback
  */
-const Post = (props) => {
+const UserListComponent = (props) => {
 
     const handleCallback = () => {
         props.callback()
@@ -22,26 +24,36 @@ const Post = (props) => {
     
     return(
         <>
-            {users && 
-            <List dense sx={{ width: '100%', minWidth: 300, minHeight: 60, maxHeight: 400, bgcolor: 'background.paper' }}>
-                    {users.map((user) => {
-                        return (
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={handleCallback} component={Link} to={`/profile/${user.id}`}>
-                                    <ListItemAvatar>
-                                        <Avatar/>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={user.username}
-                                        secondary={user.email}
-                                    />
-                                </ListItemButton>
-                            </ListItem>
-                        )   
-                })}
-            </List>}
+            {users.length > 0 ? 
+                <List dense sx={{ width: '100%', minWidth: 300, minHeight: 60, maxHeight: 400, bgcolor: 'background.paper' }}>
+                        {users.map((user) => {
+                            return (
+                                <ListItem disablePadding>
+                                    <ListItemButton onClick={handleCallback} component={Link} to={`/profile/${user.id}`}>
+                                        <ListItemAvatar>
+                                            <Avatar/>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={user.username}
+                                            secondary={user.email}
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                            )   
+                    })}
+                </List>
+            :
+                <Box
+                    display='flex'
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{width: 300, marginTop: 2, marginBottom: 2}}
+                >
+                    <Typography>Nenhum registro encontrado!</Typography>
+                </Box>}
         </>
     )
 }
 
-export default Post
+export default UserListComponent

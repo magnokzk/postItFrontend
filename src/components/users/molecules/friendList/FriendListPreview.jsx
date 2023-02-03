@@ -27,7 +27,7 @@ const FriendPaper = styled(Paper)(({ theme }) => ({
     height: 'auto'
   }))
 
-const Post = (props) => {
+const FriendListPreview = (props) => {
     const fullFriendList = props.friendList
     const compactFriendList = fullFriendList.slice(0, 4)
     
@@ -98,4 +98,4 @@ const Post = (props) => {
     )
 }
 
-export default Post
+export default FriendListPreview

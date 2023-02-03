@@ -9,18 +9,20 @@ import ListItemText from '@mui/material/ListItemText'
 import DoneIcon from '@mui/icons-material/Done'
 import ClearIcon from '@mui/icons-material/Clear'
 import Badge from '@mui/material/Badge'
+import Box from '@mui/material/Box'
 import _ from 'underscore'
 
 import { useState, useEffect } from 'react'
 
 import axios from '../../../../api/axios'
+import { Typography } from '@mui/material'
 
 const GET_REQUESTS_URL = 'controllers/user/friendRequests'
 const DELETE_REQUEST_URL = 'controllers/user/friendRequests/delete'
 const ACCEPT_REQUEST_URL = 'controllers/user/friendRequests/accept'
 
 
-const Post = (props) => {
+const FriendRequestsVisualization = (props) => {
     const token = localStorage.getItem('token')
 
     const [friendRequests, setFriendRequests] = useState([])
@@ -100,37 +102,49 @@ const Post = (props) => {
                     horizontal: 'left',
                 }}
             >
+                {friendRequests.length > 0?
                 <List sx={{ width: '300px'}}>
-                    {
-                        _.map(friendRequests, (request) => {
-                            return (
-                                <ListItem 
-                                    secondaryAction={
-                                        <>
-                                            <IconButton edge="end" aria-label="comments" onClick={() => {handleRequestAccepted(request)}}>
-                                                <DoneIcon/>
-                                            </IconButton>
-                                            <IconButton edge="end" aria-label="comments" onClick={() => {handleRequestRefused(request)}}>
-                                                <ClearIcon/>
-                                            </IconButton>
-                                        </>
-                                    }
-                                >
-                                    <ListItemAvatar>
-                                        <Avatar/>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={request.fromUserInfo.username}
-                                        secondary={request.fromUserInfo.email}
-                                    />
-                                </ListItem>
-                            )
-                        })
-                    }
-                </List>
+                {
+                    _.map(friendRequests, (request) => {
+                        return (
+                            <ListItem 
+                                secondaryAction={
+                                    <>
+                                        <IconButton edge="end" aria-label="comments" onClick={() => {handleRequestAccepted(request)}}>
+                                            <DoneIcon/>
+                                        </IconButton>
+                                        <IconButton edge="end" aria-label="comments" onClick={() => {handleRequestRefused(request)}}>
+                                            <ClearIcon/>
+                                        </IconButton>
+                                    </>
+                                }
+                            >
+                                <ListItemAvatar>
+                                    <Avatar/>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={request.fromUserInfo.username}
+                                    secondary={request.fromUserInfo.email}
+                                />
+                            </ListItem>
+                        )
+                    })
+                }
+            </List>
+            :
+            <Box
+                display='flex'
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                sx={{width: 300, marginTop: 2, marginBottom: 2}}
+            >
+                <Typography>Nenhum pedido de amizade</Typography>
+            </Box>
+            }
             </Popover>
         </>
     )
 }
 
-export default Post
+export default FriendRequestsVisualization
