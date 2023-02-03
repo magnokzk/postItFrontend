@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import Alert from '@mui/material/Alert';
 import LoadingButton from '@mui/lab/LoadingButton'
 import Button from '@mui/material/Button';
@@ -26,7 +26,7 @@ const Item = styled(Box)(({ theme }) => ({
 const Register = () => {
 
     const [loading, setLoading] = useState(false)
-
+    const [redirect, setRedirect] = useState(false)
     const [userName, setUserName] = useState('')
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
@@ -68,7 +68,7 @@ const Register = () => {
                 }
             )
 
-            return (<Link to="/"/>)
+            setRedirect(true)
         } catch (err) {
             setErrMsg('Não foi possível realizar o cadastro! Tente novamente mais tarde!')
         } finally {
@@ -78,6 +78,7 @@ const Register = () => {
 
     return (
         <>
+            {redirect && <Navigate to='/'/>}
             <Box
                 spacing={0}
                 display='flex'
